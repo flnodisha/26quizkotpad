@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Republic Day Quiz</title>
+
   <style>
     body {
       background: linear-gradient(135deg, #000428, #004e92);
@@ -156,11 +157,11 @@
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 
-  <!-- Audio Elements -->
+  <!-- 🔊 Audio Elements -->
+  <audio id="intro-sound" src="intro.mp3"></audio>
   <audio id="background-audio" src="background.mp3" loop></audio>
   <audio id="correct-sound" src="correct.mp3"></audio>
   <audio id="wrong-sound" src="wrong.mp3"></audio>
-  <audio id="intro-sound" src="intro.mp3"></audio>
 
   <script>
     const questions = [
@@ -229,16 +230,23 @@
       document.getElementById('question-container').style.display = 'block';
       document.getElementById('options-container').style.display = 'grid';
 
-      // Stop background audio
+      // Audio handling
+      const introSound = document.getElementById('intro-sound');
       const backgroundAudio = document.getElementById('background-audio');
+
+      // Reset both
+      introSound.pause();
+      introSound.currentTime = 0;
       backgroundAudio.pause();
       backgroundAudio.currentTime = 0;
 
-      // Play intro sound once
-      const introSound = document.getElementById('intro-sound');
-      introSound.pause();
-      introSound.currentTime = 0;
+      // Play intro
       introSound.play();
+
+      // When intro ends, play background in loop
+      introSound.onended = () => {
+        backgroundAudio.play();
+      };
     }
 
     function checkAnswer(selected) {
@@ -248,7 +256,7 @@
       const wrongSound = document.getElementById('wrong-sound');
       const backgroundAudio = document.getElementById('background-audio');
 
-      // Stop background music
+      // Stop background while giving feedback
       backgroundAudio.pause();
       backgroundAudio.currentTime = 0;
 
@@ -272,14 +280,14 @@
         option.className = 'option';
       });
 
-      // Stop all audio when going back
-      const backgroundAudio = document.getElementById('background-audio');
-      backgroundAudio.pause();
-      backgroundAudio.currentTime = 0;
-
+      // Stop all audio
       const introSound = document.getElementById('intro-sound');
+      const backgroundAudio = document.getElementById('background-audio');
+
       introSound.pause();
       introSound.currentTime = 0;
+      backgroundAudio.pause();
+      backgroundAudio.currentTime = 0;
     }
 
     createButtons();
